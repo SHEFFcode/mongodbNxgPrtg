@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var Group = require('../models/groups');
-var request     = require('request');
+var express   = require('express');
+var router    = express.Router();
+var Group     = require('../models/groups');
+var request   = require('request');
 
 //Get all Groups
 router.get('/', function(req, res) {
@@ -24,18 +24,6 @@ router.get('/:id', function(req, res) {
     }
   });
 });
-
-// //Add Group
-// router.post('/', function(req, res) {
-//   var runner = req.body;
-//   Group.addGroup(runner, function(err, runner) {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(runner);
-//     }
-//   });
-// });
 
 router.post('/', function (req, res) {
   request.get("https://prtg.paessler.com/api/table.json?content=groups&output=json&columns=objid,probe,group,name,downsens,partialdownsens,downacksens,upsens,warnsens,pausedsens,unusualsens,undefinedsens&start=10000&username=demo&password=demodemo", function (error, response, body) {
