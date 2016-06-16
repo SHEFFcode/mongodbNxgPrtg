@@ -28,16 +28,18 @@ router.get('/:id', function(req, res) {
 router.post('/', function (req, res) {
   request.get("https://prtg.paessler.com/api/table.json?content=groups&output=json&columns=objid,probe,group,name,downsens,partialdownsens,downacksens,upsens,warnsens,pausedsens,unusualsens,undefinedsens&start=10000&username=demo&password=demodemo", function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      var runner = JSON.parse(body);
-      Group.addGroup(runner, function(err, runner) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(runner);
-        }
+      Group.dropGroup();
+      var run = JSON.parse(body);
+      var runner = run.groups;
+      runner.map(function (i) {
+        Group.addGroup(i, function() {
+          console.log('saved');
+        });
       });
+
     }
   });
+  res.sendStatus(200);
 });
 
 

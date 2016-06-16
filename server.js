@@ -5,11 +5,11 @@ var request     = require('request');
 var bodyParser  = require('body-parser');
 var mongoose    = require('mongoose');
 var Group       = require('./models/groups.js');
-var groups      =	require('./routes/groups');
+var groups      = require('./routes/groups');
 
 //Mongoose Connection
 mongoose.connect('mongodb://localhost:27017/nxg-prtg');
-var db = mongoose.conneciton;
+var db = mongoose.connection;
 
 //Middleware
 app.use(bodyParser.json());
