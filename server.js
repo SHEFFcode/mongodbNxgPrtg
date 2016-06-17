@@ -18,7 +18,7 @@ app.use('/api/groups', groups);
 //Groups route
 app.get('/groups', function (req, res, next) {
   console.log('Received a status, working on it');
-  request.get("/api/table.json?content=groups&output=json&columns=objid,probe,group,name,downsens,partialdownsens,downacksens,upsens,warnsens,pausedsens,unusualsens,undefinedsens&start=10000&username=demo&password=demodemo", function (error, response, body) {
+  request.get("https://prtg.paessler.com/api/table.json?content=groups&output=json&columns=objid,probe,group,name,downsens,partialdownsens,downacksens,upsens,warnsens,pausedsens,unusualsens,undefinedsens&start=10000&username=demo&password=demodemo", function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
       console.log(data.groups);
@@ -26,6 +26,25 @@ app.get('/groups', function (req, res, next) {
     }
   });
 });
+
+
+setInterval(function () {
+  request.get("https://prtg.paessler.com/api/table.json?content=groups&output=json&columns=objid,probe,group,name,downsens,partialdownsens,downacksens,upsens,warnsens,pausedsens,unusualsens,undefinedsens&start=10000&username=demo&password=demodemo", function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      Group.dropGroup();
+      var run = JSON.parse(body);
+      var runner = run.groups;
+      runner.map(function (i) {
+        if (i.group === 'Paessler Servers via Cologne') {
+          Group.addGroup(i, function () {
+            console.log('saved');
+          });
+        }
+      });
+    }
+  });
+}, 30000);
+
 
 app.listen(PORT, function () {
   console.log('listening on port ' + PORT);
